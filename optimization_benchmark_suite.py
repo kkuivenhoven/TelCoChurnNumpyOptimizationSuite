@@ -6,18 +6,6 @@ def sigmoid(z):
 	s = 1 / (1 + np.exp(-z))
 	return s
 
-def master_training(training_type):
-	if training_type == 'gd':
-		print("GD")
-	elif training_type == 'momentum':
-		print("Momentum")
-	elif training_type == 'rmsprop':
-		print("RMSProp")
-	elif training_type == 'adam':
-		print("Adam")
-	else:
-		print("Not possible")
-
 def initialize_momentum(parameters):
 	v = {}
 	L = len(parameters) // 2
