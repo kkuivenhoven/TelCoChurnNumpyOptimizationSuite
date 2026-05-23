@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 import math
 
+def sigmoid(z):
+	s = 1 / (1 + np.exp(-z))
+	return s
+
 def master_training(training_type):
 	if training_type == 'gd':
 		print("GD")
@@ -40,7 +44,19 @@ def initialize_adam(parameters):
 		v["dW" + str(l)] = np.zeros(parameters["W" + str(l)].shape)
 		v["db" + str(l)] = np.zeros(parameters["b" + str(l)].shape)
 	return v, s
-		
+
+# def initialize_parameters(layer_dimensions, learning_rate):
+# don't use learning_rate - this was a temporary placeholder for Course 1
+# the better one is to use the deep network standard introduced in Course 2
+# 	this is the He Initialization. For ReLu..use what is written below
+def initialize_parameters(layer_dimensions):
+	parameters = {}
+	L = len(layer_dimensions)
+	for l in range(1, L):
+		# parameters["W" + str(l)] = np.random.randn(layer_dimensions[l], layer_dimensions[l-1]) * learning_rate
+		parameters["W" + str(l)] = np.random.randn(layer_dimensions[l], layer_dimensions[l-1]) * np.sqrt(2 / layer_dimensions[l-1])
+		parameters["b" + str(l)] = np.zeros((layer_dimensions[l], 1))
+	return parameters
 		
 def create_mini_batches(X, Y):
 	batches = []
@@ -55,6 +71,88 @@ def create_mini_batches(X, Y):
 		mini_batch_Y = Y_shuffled[:, (i-1)*64:i*64]
 		batches.append((mini_batch_X, mini_batch_Y))
 	return batches
+
+def master_training_loop(X, Y, layer_dims, epochs, learning_rate, training_type):
+	v = {}
+	s = {}
+	# initialize network parameters W and b for all layers
+	parameters = initialize_parameters(layer_dims)
+	beta = 0.9
+	beta1 = 0.9
+	beta2 = 0.9
+	epsilon = 1e-8
+
+	if training_type == 'momentum':
+		v = initialize_momentum(parameters)
+		beta = 0.9
+	if training_type == 'rmsprop':
+		s = initialize_rmsprop(parameters)
+		beta = 0.999
+	if training_type == 'adam':
+		v, s = initialize_adam(parameters)
+
+	# The grand optimization loop
+	for i in range(1, epochs + 1):
+		# Generate a fresh set of scrambled mini-batches for this epoch
+		batches = create_mini_batches(X, Y)
+
+		# Loop through every tiny chunk of customers (ever mini batch)
+		for X_mini_batch, Y_mini_batch in batches:
+			# A. Forward propagation: calculate predictions for this batch
+			cache = {}
+			cache["A" + str(0)] = X_mini_batch
+			for l in range(1, len(layer_dims)-1):
+				cache["Z" + str(l)] = np.dot(parameters["W" + str(l)], cache["A" + str(l-1)]) + parameters["b" + str(l)]
+				cache["A" + str(l)] = np.maximum(0, cache["Z" + str(l)])
+			size = ((len(layer_dims))-1)
+			cache["Z" + str(size)] = np.dot(parameters["W" + str(size)], cache["A" + str(size-1)]) + parameters["b" + str(size)]
+			cache["A" + str(size)] = sigmoid(cache["Z" + str(size)])
+
+			# B. Compute cost: see how off the predictions were for this batch
+			# Adding 1e-15 is a trick to prevent the code from crashing with NaN if your model accidentally 
+			# predicts an exact 0.0 or 1.0
+			inner = (Y_mini_batch * np.log(cache["A" + str(size)] + 1e-15)) + (1 - Y_mini_batch)*(np.log(1-cache["A" + str(size)] + 1e-15))
+			cost = (-1) * (1/X_mini_batch.shape[1]) * np.sum(inner)
+
+			if training_type == 'momentum':
+				# C. Backward propagation: Calculate the immediate raw gradients (dW, db)
+				grads = {}
+				grads["dZ" + str(size)] = (cache["A" + str(size)] - Y_mini_batch)
+				for l in range(len(layer_dims) - 1, 0, -1):
+					grads["dW" + str(l)] = (1/X_mini_batch.shape[1]) * np.dot(grads["dZ" + str(l)], cache["A" + str(l-1)].T)
+					grads["db" + str(l)] = (1/X_mini_batch.shape[1]) * np.sum(grads["dZ" + str(l)], axis = 1, keepdims=True)
+					v["dW" + str(l)] = (beta * v["dW" + str(l)]) + ((1-beta) * grads["dW" + str(l)])
+					v["db" + str(l)] = (beta * v["db" + str(l)]) + ((1-beta) * grads["db" + str(l)])
+					if l > 1:
+						grads["dA" + str(l-1)] = np.dot(parameters["W" + str(l)].T, grads["dZ" + str(l)])
+						relu_derivative_gate = (cache["Z" + str(l-1)] > 0).astype(float)
+						dZ_prev = grads["dA" + str(l-1)] * relu_derivative_gate
+						grads["dZ" + str(l-1)] = dZ_prev
+				# D. Update parameters: feed the raw gradients and the caches into your optimizer
+				for l in range(1, len(layer_dims)):
+					parameters["W" + str(l)] = parameters["W" + str(l)] - np.dot(learning_rate, v["dW" + str(l)])
+					parameters["b" + str(l)] = parameters["b" + str(l)] - np.dot(learning_rate, v["db" + str(l)])
+
+			elif training_type == 'gd':
+				# C. Backward propagation: Calculate the immediate raw gradients (dW, db)
+				grads = {}
+				grads["dZ" + str(size)] = (cache["A" + str(size)] - Y_mini_batch)
+				for l in range(len(layer_dims) - 1, 0, -1):
+					grads["dW" + str(l)] = (1/X_mini_batch.shape[1]) * np.dot(grads["dZ" + str(l)], cache["A" + str(l-1)].T)
+					grads["db" + str(l)] = (1/X_mini_batch.shape[1]) * np.sum(grads["dZ" + str(l)], axis = 1, keepdims=True)
+					if l > 1:
+						grads["dA" + str(l-1)] = np.dot(parameters["W" + str(l)].T, grads["dZ" + str(l)])
+						relu_derivative_gate = (cache["Z" + str(l-1)] > 0).astype(float)
+						dZ_prev = grads["dA" + str(l-1)] * relu_derivative_gate
+						grads["dZ" + str(l-1)] = dZ_prev
+						
+				# D. Update parameters: feed the raw gradients and the caches into your optimizer
+				for l in range(1, len(layer_dims)):
+					parameters["W" + str(l)] = parameters["W" + str(l)] - np.dot(learning_rate, grads["dW" + str(l)])
+					parameters["b" + str(l)] = parameters["b" + str(l)] - np.dot(learning_rate, grads["db" + str(l)])
+
+	return parameters
+
 
 # hardcode a fixed random seed such that every optimizer starts with the 
 # exact same weight matrices (W, b)
@@ -79,8 +177,6 @@ dataFrame = dataFrame.drop('Churn_Yes', axis=1)
 # Transpose such that each column represents a customer and each row represents a feature
 Y_df = Y_df.values.reshape(-1, 1)
 Y = Y_df.T
-# print("dataframe shape")
-# print(dataframe.shape)
 X_df = dataFrame.T
 X = X_df.to_numpy()
 print("X shape")
@@ -92,7 +188,8 @@ print(Y.shape)
 layer_dims = [45, 20, 7, 1]
 learning_rate = 0.01
 
-create_mini_batches(X_df)
+# paramters = initialize_parameters(layer_dims, learning_rate)
+# X_shuffled, Y_shuffled = create_mini_batches(X, Y)
 
 master_training('gd')
 master_training('momentum')
