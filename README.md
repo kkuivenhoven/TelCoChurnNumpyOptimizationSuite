@@ -12,16 +12,16 @@ Construction of a multi-layer neural network from scratch using NumPy to predict
 ## Optimization Algorithms Compared:
 ### Test Results
 **For 5 epochs:**
-Gradient Descent Accuracy: 72.75%
-Momentum Accuracy: 74.59%
-RMSProp Accuracy: 78.35%
-Adam Accuracy: 80.27%
+* Gradient Descent Accuracy: 72.75%
+* Momentum Accuracy: 74.59%
+* RMSProp Accuracy: 78.35%
+* Adam Accuracy: 80.27%
 
 **For 25 epochs:**
-Gradient Descent Accuracy: 79.13%
-Momentum Accuracy: 79.21%
-RMSProp Accuracy: 78.07%
-Adam Accuracy: 80.06%
+* Gradient Descent Accuracy: 79.13%
+* Momentum Accuracy: 79.21%
+* RMSProp Accuracy: 78.07%
+* Adam Accuracy: 80.06%
 
 ### Technical Breakdowns
 **Gradient Descent**: This is our baseline optimizer. When applied to mini batches, the cost trends downward. However it remains noisy since some mini-batches are naturally easier while others are harder. The parameters are updated using only the current batch's raw gradients iwith no historical memory tracking.
