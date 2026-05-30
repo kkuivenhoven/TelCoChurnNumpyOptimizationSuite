@@ -12,16 +12,16 @@ Construction of a multi-layer neural network from scratch using NumPy to predict
 ## Optimization Algorithms Compared:
 ### Test Results
 **For 5 epochs:**
-Gradient Descent Accuracy: 72.75%[space][space]
-Momentum Accuracy: 74.59%[space][space]
-RMSProp Accuracy: 78.35%[space][space]
-Adam Accuracy: 80.27%[space][space]
+Gradient Descent Accuracy: 72.75%<br>
+Momentum Accuracy: 74.59%<br>
+RMSProp Accuracy: 78.35%<br>
+Adam Accuracy: 80.27%<br>
 
 **For 25 epochs:**
-Gradient Descent Accuracy: 79.13%[space][space]
-Momentum Accuracy: 79.21%[space][space]
-RMSProp Accuracy: 78.07%[space][space]
-Adam Accuracy: 80.06%[space][space]
+Gradient Descent Accuracy: 79.13%<br>
+Momentum Accuracy: 79.21%<br>
+RMSProp Accuracy: 78.07%<br>
+Adam Accuracy: 80.06%<br>
 
 ### Technical Breakdowns
 **Gradient Descent**: This is our baseline optimizer. When applied to mini batches, the cost trends downward. However it remains noisy since some mini-batches are naturally easier while others are harder. The parameters are updated using only the current batch's raw gradients iwith no historical memory tracking.
@@ -33,9 +33,9 @@ Adam Accuracy: 80.06%[space][space]
 **Adam**: this obtains the smoothing/speed of momentum while also utilizing the stability/scaling of RMSprop. It works well with noisy gradients or sparse data.
 
 ## Key Engineering Challenges Overcome
-**Challenge 1**: To handle the large values such as TotalCharges that could very well skew a mini batch (if a mini batch happened to have an abnormal amount of large values), I normalized the data to avoid abnormal mini-batch skewing. I did the same with tenure and MonthlyCharges.[space][space]
-**Challenge 2**: To properly train and test the neural network, I had to split the data into 80% training data and 20% test data.[space][space]
-**Challenge 3**: Learning that when scaled to a mini-batch method, it changes some of the implementaiton in comparison to the non-optimized churn neural network I wrote before this. I had to learn the differences between the 2.[space][space]
+**Challenge 1**: To handle the large values such as TotalCharges that could very well skew a mini batch (if a mini batch happened to have an abnormal amount of large values), I normalized the data to avoid abnormal mini-batch skewing. I did the same with tenure and MonthlyCharges.<br>
+**Challenge 2**: To properly train and test the neural network, I had to split the data into 80% training data and 20% test data.<br>
+**Challenge 3**: Learning that when scaled to a mini-batch method, it changes some of the implementaiton in comparison to the non-optimized churn neural network I wrote before this. I had to learn the differences between the 2.<br>
 
 ## Visual Performance Analysis
 I found that when the epochs are 5, the Adam and RMSProp curves demonstrated the fastest convergence speeds while Gradient Descent had the slowest convergence speed and maintained the highest cost. I found a similar situation when the epochs is 25 - however, RMSProp and Adam seemed to oscillate (or have the same convergence speed) towards the end of the 25 epochs.
