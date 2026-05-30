@@ -4,10 +4,10 @@
 Construction of a multi-layer neural network from scratch using NumPy to predict customer churn/cancellation. In this project, I specifically compare convergence speed (lowering the cost) and performance of four optimizer engines (Gradient Descent, Momentum, RMSProp and Adam).
 
 ## Neural Network Architecture
-**Layer Dimensions:** [Input (45), Hidden1 (20), Hidden2 (7), Output (1)]
-**Hidden Activations:** ReLU 
-**Output Activations:** Sigmoid 
-**Weight Initialization:** He Initialization
+**Layer Dimensions:** [Input (45), Hidden1 (20), Hidden2 (7), Output (1)]<br>
+**Hidden Activations:** ReLU <br>
+**Output Activations:** Sigmoid <br>
+**Weight Initialization:** He Initialization<br>
 
 ## Optimization Algorithms Compared:
 ### Test Results
@@ -34,8 +34,10 @@ Adam Accuracy: 80.06%<br>
 
 ## Key Engineering Challenges Overcome
 **Challenge 1**: To handle the large values such as TotalCharges that could very well skew a mini batch (if a mini batch happened to have an abnormal amount of large values), I normalized the data to avoid abnormal mini-batch skewing. I did the same with tenure and MonthlyCharges.<br>
+
 **Challenge 2**: To properly train and test the neural network, I had to split the data into 80% training data and 20% test data.<br>
-**Challenge 3**: Learning that when scaled to a mini-batch method, it changes some of the implementaiton in comparison to the non-optimized churn neural network I wrote before this. I had to learn the differences between the 2.<br>
+
+**Challenge 3**: Learning that when scaled to a mini-batch method, it changes some of the implementaiton in comparison to the non-optimized churn neural network I wrote before this. I had to learn the differences between the two.<br>
 
 ## Visual Performance Analysis
 I found that when the epochs are 5, the Adam and RMSProp curves demonstrated the fastest convergence speeds while Gradient Descent had the slowest convergence speed and maintained the highest cost. I found a similar situation when the epochs is 25 - however, RMSProp and Adam seemed to oscillate (or have the same convergence speed) towards the end of the 25 epochs.
