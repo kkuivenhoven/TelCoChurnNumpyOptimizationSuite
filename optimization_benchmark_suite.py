@@ -212,8 +212,7 @@ X = X_df.to_numpy()
 # [Input, Hidden1, Hidden2, Output]
 layer_dims = [45, 20, 7, 1]
 learning_rate = 0.01
-# epochs = 1
-epochs = 5
+epochs = 25
 size = ((len(layer_dims))-1)
 
 split_index = int(X.shape[1] * 0.8)
