@@ -33,9 +33,9 @@ Adam Accuracy: 80.06%[space][space]
 **Adam**: this obtains the smoothing/speed of momentum while also utilizing the stability/scaling of RMSprop. It works well with noisy gradients or sparse data.
 
 ## Key Engineering Challenges Overcome
-**Challenge 1**: To handle the large values such as TotalCharges that could very well skew a mini batch (if a mini batch happened to have an abnormal amount of large values), I normalized the data to avoid abnormal mini-batch skewing. I did the same with tenure and MonthlyCharges.
-**Challenge 2**: To properly train and test the neural network, I had to split the data into 80% training data and 20% test data.
-**Challenge 3**: Learning that when scaled to a mini-batch method, it changes some of the implementaiton in comparison to the non-optimized churn neural network I wrote before this. I had to learn the differences between the 2.
+**Challenge 1**: To handle the large values such as TotalCharges that could very well skew a mini batch (if a mini batch happened to have an abnormal amount of large values), I normalized the data to avoid abnormal mini-batch skewing. I did the same with tenure and MonthlyCharges.[space][space]
+**Challenge 2**: To properly train and test the neural network, I had to split the data into 80% training data and 20% test data.[space][space]
+**Challenge 3**: Learning that when scaled to a mini-batch method, it changes some of the implementaiton in comparison to the non-optimized churn neural network I wrote before this. I had to learn the differences between the 2.[space][space]
 
 ## Visual Performance Analysis
 I found that when the epochs are 5, the Adam and RMSProp curves demonstrated the fastest convergence speeds while Gradient Descent had the slowest convergence speed and maintained the highest cost. I found a similar situation when the epochs is 25 - however, RMSProp and Adam seemed to oscillate (or have the same convergence speed) towards the end of the 25 epochs.
