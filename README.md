@@ -40,7 +40,7 @@ Adam Accuracy: 80.06%<br>
 **Challenge 3**: Learning that when scaled to a mini-batch method, it changes some of the implementaiton in comparison to the non-optimized churn neural network I wrote before this. I had to learn the differences between the two.<br>
 
 ## Visual Performance Analysis
-I found that when the epochs are 5, the Adam and RMSProp curves demonstrated the fastest convergence speeds while Gradient Descent had the slowest convergence speed and maintained the highest cost. I found a similar situation when the epochs is 25 - however, RMSProp and Adam seemed to oscillate (or have the same convergence speed) towards the end of the 25 epochs.
+I found that when the epochs are 5, the Adam and RMSProp curves demonstrated the fastest convergence speeds while Gradient Descent had the slowest convergence speed and maintained the highest cost. I found a similar situation when the epochs is 25 - however, RMSProp and Adam seemed to oscillate (or have the similar convergence speed) towards the end of the 25 epochs.
 
 ### 5-Epoch Optimization Race
 ![5 Epoch Benchmark](5_epochs.png)
