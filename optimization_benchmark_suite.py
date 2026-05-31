@@ -1,3 +1,14 @@
+"""
+Deep Learning Optimizer Benchmark Suite
+
+This script implements a multi-layer neural network from scratch using NumPy to predict customer churn.
+This project serves as a benchmark to study the behaviors of 4 different optimizers: Adam, RMSProp,
+Momentum, and Gradient Descent. The behaviors evaluated are convergence speed, cost reduction and 
+the structural behavior. 
+
+The code handles custom mini-batch slicing, data normalization to prevent gradient explosion and 
+outputs comparative performance metrics across varying epoch milestones.
+"""
 import numpy as np
 import pandas as pd
 import math
@@ -34,7 +45,6 @@ def initialize_adam(parameters):
 		v["db" + str(l)] = np.zeros(parameters["b" + str(l)].shape)
 	return v, s
 
-# def initialize_parameters(layer_dimensions, learning_rate):
 # don't use learning_rate - this was a temporary placeholder for Course 1
 # the better one is to use the deep network standard introduced in Course 2
 # 	this is the He Initialization. For ReLu..use what is written below
@@ -222,14 +232,11 @@ Y_train = Y[:, :split_index]
 X_test = X[:, split_index:]
 Y_test = Y[:, split_index:]
 
-# parameters, cost_metrics = master_training_loop(X, Y, layer_dims, epochs, learning_rate, training_type):
-# def master_training_loop(X, Y, layer_dims, epochs, learning_rate, training_type):
 parameters_gd, cost_metrics_gd, cache_gd = master_training_loop(X_train, Y_train, layer_dims, epochs,learning_rate, 'gd')
 parameters_momentum, cost_metrics_momentum, cache_momentum = master_training_loop(X_train, Y_train, layer_dims, epochs, learning_rate, 'momentum')
 parameters_rmsprop, cost_metrics_rmsprop, cache_rmsprop = master_training_loop(X_train, Y_train, layer_dims, epochs, learning_rate, 'rmsprop')
 parameters_adam, cost_metrics_adam, cache_adam = master_training_loop(X_train, Y_train, layer_dims, epochs, learning_rate, 'adam')
 
-# def predict(parameters, X, layer_dims):
 predictions_gd = predict(parameters_gd, X_test, layer_dims)
 accuracy_gd = np.mean(predictions_gd == Y_test)
 
