@@ -48,3 +48,10 @@ I found that when the epochs are 5, the Adam and RMSProp curves demonstrated the
 
 ## Final Test Accuracy Scorecard
 All in all, I found that the accuracy of Adam surpassed that of the other models for the number of epochs I used. I did find that if I increased the # of epochs to 100, the RMSProp accuracy came out slightly better than the Adam accuracy (80.06% vs. 79.56%).
+
+### Installation
+Ensure you have `numpy`, `pandas` and `matplotlib` installed, then run the script:
+```
+python optimization_benchmark_suite.py
+```
+
