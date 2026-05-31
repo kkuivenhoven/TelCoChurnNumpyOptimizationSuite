@@ -1,5 +1,3 @@
-# TelCoChurnNumpyOptimizationSuite
-
 ## Deep Learning Optimization Benchmark Suite
 Construction of a multi-layer neural network from scratch using NumPy to predict customer churn/cancellation. In this project, I specifically compare convergence speed (lowering the cost) and performance of four optimizer engines (Gradient Descent, Momentum, RMSProp and Adam).
 
